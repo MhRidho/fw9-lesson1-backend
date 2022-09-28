@@ -14,5 +14,6 @@ const createContactValidator = [
 
 contact.get('/', contactController.getAllContacts);
 contact.post('/', ...createContactValidator, contactController.createContact);
+contact.get('/:id', contactController.getContactById);
 
 module.exports = contact;

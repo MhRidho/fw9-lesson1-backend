@@ -21,8 +21,20 @@ exports.getAllContacts = (req, res) => {
       pageInfo.currentPage = parseInt(page);
       pageInfo.nextPage = pageInfo.currentPage < pageInfo.totalPage ? pageInfo.currentPage + 1 : null;
       pageInfo.prevPage = pageInfo.currentPage > 1 ? pageInfo.currentPage - 1 : null;
+      pageInfo.limit = limit;
       return response(res, 'List All Contacts', results, pageInfo);
     });
+  });
+};
+
+exports.getContactById = (req, res) => {
+  const { id } = req.params;
+  contactModel.getContactById(id, (err, results) => {
+    if (results.rows.length > 0) {
+      return response(res, 'Detail Contact', results.rows[0]);
+    } else {
+      return res.redirect('/404');
+    }
   });
 };
 
