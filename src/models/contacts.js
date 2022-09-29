@@ -33,3 +33,19 @@ exports.createContact = (data, cb) => {
     }
   });
 };
+
+exports.deleteContact = (id, cb) => {
+  const q = 'DELETE FROM contact WHERE id=$1 RETURNING *';
+  const val = [id];
+  db.query(q, val, (err, res) => {
+    cb(res.rows);
+  });
+};
+
+exports.editContact = (id, data, cb) => {
+  const q = 'UPDATE contact SET username=$1, email=$2, phone=$3, message=$4 WHERE id=$5 RETURNING *';
+  const val = [data.username, data.email, data.phone, data.message, id];
+  db.query(q, val, (err, res) => {
+    cb(err, res);
+  });
+};

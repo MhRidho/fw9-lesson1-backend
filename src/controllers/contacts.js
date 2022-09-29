@@ -38,17 +38,31 @@ exports.getContactById = (req, res) => {
   });
 };
 
-exports.createContact =
-  (req, res) => {
-    const validation = validationResult(req);
-    if (!validation.isEmpty()) {
-      return response(res, 'Error occured', validation.array(), 400);
+exports.createContact = (req, res) => {
+  const validation = validationResult(req);
+  if (!validation.isEmpty()) {
+    return response(res, 'Error occured', validation.array(), 400);
+  }
+  contactModel.createContact(req.body, (err, results) => {
+    if (err) {
+      return errorResponse(err, res);
+    } else {
+      return response(res, 'Create contact successfully', results[0]);
     }
-    contactModel.createContact(req.body, (err, results) => {
-      if (err) {
-        return errorResponse(err, res);
-      } else {
-        return response(res, 'Create contact successfully', results[0]);
-      }
-    });
-  };
+  });
+};
+
+exports.deleteContact = (req, res) => {
+  const { id } = req.params;
+  contactModel.deleteContact(id, (results) => {
+    return response(res, 'Contact deleted!', results[0]);
+  });
+};
+
+exports.editContact = (req, res) => {
+  const { id } = req.params;
+  contactModel.editContact(id, req.body, (err, results) => {
+    return response(res, 'Update Contact succsess!', results.rows[0]);
+  });
+};
+
